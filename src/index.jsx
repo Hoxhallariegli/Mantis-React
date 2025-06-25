@@ -34,13 +34,22 @@ import '@fontsource/public-sans/700.css';
 // project imports
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';  
+import store, { persistor } from './store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 
 // ==============================|| MAIN - REACT DOM RENDER ||============================== //
 
-root.render(<App />);
+root.render(
+<Provider store={store}>
+<PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
+  </Provider>
+  );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
