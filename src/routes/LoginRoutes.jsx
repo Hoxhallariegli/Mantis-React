@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { Navigate } from 'react-router-dom';
 
 // project imports
 import AuthLayout from 'layout/Auth';
@@ -18,12 +19,17 @@ const LoginRoutes = {
       element: <AuthLayout />,
       children: [
         {
-          path: '/login',
+          path: 'login',
           element: <LoginPage />
         },
         {
-          path: '/register',
+          path: 'register',
           element: <RegisterPage />
+        },
+        // Catch-all for unauthenticated users
+        {
+          path: '*',
+          element: <Navigate to="/login" replace />
         }
       ]
     }

@@ -24,11 +24,17 @@ import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 
 import axiosClient from 'utils/axios';  // Sigurohu që ke axiosClient të konfiguruar për API-n
+import { useDispatch } from 'react-redux';
+import { loginStart, loginSuccess, loginFailure } from '../../store/authSlice';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function AuthLogin({ isDemo = false, onLoginSuccess }) {
     const [checked, setChecked] = React.useState(false);
     const [showPassword, setShowPassword] = React.useState(false);
     const [submitError, setSubmitError] = React.useState(null);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -54,22 +60,30 @@ export default function AuthLogin({ isDemo = false, onLoginSuccess }) {
                         .max(50, 'Password must be less than 50 characters') // pata rrit nga 10
                 })}
                 onSubmit={async (values, { setSubmitting }) => {
-                    setSubmitError(null);
+                    dispatch(loginStart());
                     try {
-                        await axiosClient.get('/sanctum/csrf-cookie'); // Marr CSRF token (Laravel Sanctum)
-                        const response = await axiosClient.post('/api/login', {
-                            email: values.email,
-                            password: values.password
-                        });
-                        if (onLoginSuccess) {
-                            onLoginSuccess(response.data);
-                            setSubmitError('Login successful. Please check your credentials.');
-                        }
+                      await axiosClient.get('/sanctum/csrf-cookie');
+                      const response = await axiosClient.post('/api/login', {
+                        email: values.email,
+                        password: values.password
+                      });
+                      const { user, token } = response.data.data;
+                      dispatch(loginSuccess({
+                        user: response.data.data.user,
+                        token: response.data.data.token
+                      })); // store user info in redux
+                      console.log("Sukses log in",response);
+            
+                      if (onLoginSuccess) onLoginSuccess(response.data);
+            
+                      navigate('/dashboard/default'); // redirect to dashboard
+            
                     } catch (error) {
-                        setSubmitError('Login failed. Please check your credentials.');
+                        dispatch(loginFailure(error.response?.data?.message || 'Login failed.'));
+                      console.log("Deshtim log in",loginFailure);
                     }
                     setSubmitting(false);
-                }}
+                  }}
             >
                 {({ errors, handleBlur, handleChange, touched, values, handleSubmit, isSubmitting }) => (
                     <form noValidate onSubmit={handleSubmit}>

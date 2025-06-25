@@ -1,8 +1,10 @@
 import { lazy } from 'react';
+import { Navigate } from 'react-router-dom';
 
 // project imports
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
+import RequireAuth from './RequireAuth';
 
 // render- Dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
@@ -12,6 +14,8 @@ const Color = Loadable(lazy(() => import('pages/component-overview/color')));
 const Typography = Loadable(lazy(() => import('pages/component-overview/typography')));
 const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
 
+
+
 // render - sample page
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
 
@@ -19,7 +23,11 @@ const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')))
 
 const MainRoutes = {
   path: '/',
-  element: <DashboardLayout />,
+  element: (
+    <RequireAuth>
+      <DashboardLayout />
+    </RequireAuth>
+  ),
   children: [
     {
       path: '/',
@@ -49,6 +57,11 @@ const MainRoutes = {
     {
       path: 'sample-page',
       element: <SamplePage />
+    },
+    // Catch-all: if user is logged in but route doesn't exist
+    {
+      path: '*',
+      element: <Navigate to="/" replace />
     }
   ]
 };
