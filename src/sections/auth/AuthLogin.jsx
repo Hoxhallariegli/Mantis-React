@@ -73,11 +73,11 @@ export default function AuthLogin({ isDemo = false, onLoginSuccess }) {
                         token: response.data.data.token
                       })); // store user info in redux
                       console.log("Sukses log in",response);
-            
+
                       if (onLoginSuccess) onLoginSuccess(response.data);
-            
+
                       navigate('/dashboard/default'); // redirect to dashboard
-            
+
                     } catch (error) {
                         dispatch(loginFailure(error.response?.data?.message || 'Login failed.'));
                       console.log("Deshtim log in",loginFailure);
@@ -87,7 +87,7 @@ export default function AuthLogin({ isDemo = false, onLoginSuccess }) {
             >
                 {({ errors, handleBlur, handleChange, touched, values, handleSubmit, isSubmitting }) => (
                     <form noValidate onSubmit={handleSubmit}>
-                        <Grid container spacing={3}>
+
                             <Grid item xs={12}>
                                 <Stack sx={{ gap: 1 }}>
                                     <InputLabel htmlFor="email-login">Email Address</InputLabel>
@@ -174,7 +174,7 @@ export default function AuthLogin({ isDemo = false, onLoginSuccess }) {
                                     </Button>
                                 </AnimateButton>
                             </Grid>
-                        </Grid>
+
                     </form>
                 )}
             </Formik>
