@@ -79,8 +79,10 @@ export default function AuthLogin({ isDemo = false, onLoginSuccess }) {
                       navigate('/dashboard/default'); // redirect to dashboard
 
                     } catch (error) {
-                        dispatch(loginFailure(error.response?.data?.message || 'Login failed.'));
-                      console.log("Deshtim log in",loginFailure);
+                        const message = error.response?.data?.message || 'Login failed.';
+                        dispatch(loginFailure(message));
+                      console.log("Deshtim log in",message);
+                      setSubmitError(message);
                     }
                     setSubmitting(false);
                   }}

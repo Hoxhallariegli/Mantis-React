@@ -6,6 +6,8 @@ import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
 import RequireAuth from './RequireAuth';
 
+import ProfilePage from '../pages/extra-pages/UserProfile';
+
 // render- Dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
 
@@ -57,6 +59,10 @@ const MainRoutes = {
     {
       path: 'sample-page',
       element: <SamplePage />
+    },
+    {
+      path: 'userprofile',
+      element: <ProfilePage />
     },
     // Catch-all: if user is logged in but route doesn't exist
     {

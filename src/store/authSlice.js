@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
 const initialState = {
     user: null,
     token: null,
@@ -33,9 +34,12 @@ loginFailure(state, action) {
       state.isLoggedIn = false;
       state.error = null;
       state.loading = false;
-    }
+    },
+    updateUserSuccess(state, action) {
+        state.user = { ...state.user, ...action.payload };
+      }
   }
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout } = authSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, logout,updateUserSuccess } = authSlice.actions;
 export default authSlice.reducer;
